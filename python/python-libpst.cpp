@@ -66,7 +66,7 @@ pst::pst(const string filename, const string charset) {
     root = NULL;
     topf = NULL;
     if (is_open) {
-        ::pst_load_index(&pf);
+        ::pst_load_index(&pf); // FIXME: check the return and propagate to Python
         ::pst_load_extended_attributes(&pf);
         if (pf.d_head) root = ::pst_parse_item(&pf, pf.d_head, NULL);
         if (root)      topf = ::pst_getTopOfFolders(&pf, root)->child;
