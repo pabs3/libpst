@@ -1047,9 +1047,9 @@ static int pst_build_id_ptr(pst_file *pf, int64_t offset, int32_t depth, uint64_
         return -1;
     }
     DEBUG_INFO(("Reading index block\n"));
-    if (pst_read_block_size(pf, offset, BLOCK_SIZE, BLOCK_SIZE, &buf) < BLOCK_SIZE) {
+    if (pst_read_block_size(pf, offset, BLOCK_SIZE, BLOCK_SIZE, &buf) < BLOCK_SIZE || !buf) {
         DEBUG_WARN(("Failed to read %zu bytes\n", BLOCK_SIZE));
-        if (buf) free(buf);
+        free(buf);
         DEBUG_RET();
         return -1;
     }
@@ -1064,14 +1064,14 @@ static int pst_build_id_ptr(pst_file *pf, int64_t offset, int32_t depth, uint64_
     }
     if (item_count > count_max) {
         DEBUG_WARN(("Item count %" PRIi32 " too large, max is %" PRIi32 "\n", item_count, count_max));
-        if (buf) free(buf);
+        free(buf);
         DEBUG_RET();
         return -1;
     }
     index.id = pst_getIntAt(pf, buf+BACKLINK_OFFSET);
     if (index.id != linku1) {
         DEBUG_WARN(("Backlink %#" PRIx64 " in this node does not match required %#" PRIx64 "\n", index.id, linku1));
-        if (buf) free(buf);
+        free(buf);
         DEBUG_RET();
         return -1;
     }
@@ -1090,7 +1090,7 @@ static int pst_build_id_ptr(pst_file *pf, int64_t offset, int32_t depth, uint64_
             // if (index.id & 0x02) DEBUG_INFO(("two-bit set!!\n"));
             if ((index.id >= end_val) || (index.id < old)) {
                 DEBUG_WARN(("This item isn't right. Must be corruption, or I got it wrong!\n"));
-                if (buf) free(buf);
+                free(buf);
                 DEBUG_RET();
                 return -1;
             }
@@ -1124,7 +1124,7 @@ static int pst_build_id_ptr(pst_file *pf, int64_t offset, int32_t depth, uint64_
                         depth, x, table.start, table.u1, table.offset, table2.start));
             if ((table.start >= end_val) || (table.start < old)) {
                 DEBUG_WARN(("This table isn't right. Must be corruption, or I got it wrong!\n"));
-                if (buf) free(buf);
+                free(buf);
                 DEBUG_RET();
                 return -1;
             }
@@ -1132,7 +1132,7 @@ static int pst_build_id_ptr(pst_file *pf, int64_t offset, int32_t depth, uint64_
             (void)pst_build_id_ptr(pf, table.offset, depth+1, table.u1, table.start, table2.start);
         }
     }
-    if (buf) free (buf);
+    free (buf);
     DEBUG_RET();
     return 0;
 }
