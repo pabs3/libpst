@@ -6,3 +6,25 @@ pst2diii needs header and mime type updates from readpst.
 
 At the next soname bump (to libpst.so.5) we should
     move some of readpst into the shared library, in particular write_normal_email()
+
+strip comments from Doxyfile ./xml/Doxyfile
+deduplicate Doxyfile ./xml/Doxyfile
+move archives to github files
+delete pdf files?
+delete or update CT Summation link
+revamp the README file
+	https://github.com/hoyon/mpv-mpris
+add CI
+publish website on github pages
+publish on sr.ht too
+switch away from system()
+pst2dii: lookup convert path at runtime
+drop pst2dii.c generation
+drop patches
+drop tarballs
+drop pdfs
+switch xml/sgml to UTF-8
+drop sgml
+drop header.xml merging
+add sanitisers
+add coverity
