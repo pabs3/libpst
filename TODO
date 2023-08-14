@@ -6,3 +6,5 @@ pst2diii needs header and mime type updates from readpst.
 
 At the next soname bump (to libpst.so.5) we should
     move some of readpst into the shared library, in particular write_normal_email()
+
+make readpst -j safe by adding support for reading files using mmap
