@@ -206,6 +206,8 @@ pid_t try_fork(char *folder)
     int available = grim_reaper(0);
     // If children have called sem_post but not exited yet, we could have available > 0 but active_children == max_children
     if (available && active_children < max_children) {
+        // Save the file position in case the child changes it
+        long fpos = ftell(pstfile.fp);
         sem_wait(global_children);
         pid_t child = fork();
         if (child < 0) {
@@ -224,6 +226,8 @@ pid_t try_fork(char *folder)
             //printf("parent %d forked child pid %d to process folder %s\n", me, child, folder);
             //fflush(stdout);
             child_processes[active_children++] = child;
+            // Restore the file position in case the child changed it
+            fseek(pstfile.fp, fpos, SEEK_SET);
         }
         return child;
     }
