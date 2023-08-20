@@ -1097,6 +1097,7 @@ void write_separate_attachment(char f_name[], pst_item_attach* attach, int attac
             else
                 sprintf(temp, "%s-%s-%i", f_name, attach_filename, x);
         } while ((fp = fopen(temp, "r")) && ++x < 99999999);
+        if (fp) fclose(fp);
         if (x > 99999999) {
             DIE(("error finding attachment name. exhausted possibilities to %s\n", temp));
         }
